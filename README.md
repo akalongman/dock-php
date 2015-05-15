@@ -1,12 +1,25 @@
-Docker From php:7.0-fpm 
+Docker From php:5.6.8-fpm 
 
 Added libraries: 
 
- * mysql
  * iconv
+ * json
  * mcrypt
  * mbstring
- * gd
+ * mysql
+ * mysqli
+ * pdo_mysql
+ * pdo_sqlite
+ * phar
+ * curl
+ * ftp
+ * hash
+ * session
+ * simplexml
+ * tokenizer
+ * xml
+ * xmlrpc
+ * zip
 
 # Docker compose usage
 
@@ -15,7 +28,7 @@ Add to your docker-compose.yml file following:
 ```
 phpfpm: 
   command: php-fpm --allow-to-run-as-root
-  image: akalongman/dock-phpfpm-7.0
+  image: torniker/phpfpm-5.6
   volumes:
     - /path/to/fpm.conf:/usr/local/etc/php-fpm.conf
     - /path/to/php.ini:/usr/local/etc/php/php.ini
