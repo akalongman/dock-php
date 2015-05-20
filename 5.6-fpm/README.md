@@ -43,7 +43,7 @@ Samples for fpm.conf and php.ini:
  * php.ini - [https://github.com/akalongman/dock-php/wiki/php.ini](https://github.com/akalongman/dock-php/wiki/php.ini)
  * fpm.conf - [https://github.com/akalongman/dock-php/wiki/fpm.conf](https://github.com/akalongman/dock-php/wiki/fpm.conf)
 
-# Configuring nginx docker to work with phpfmp
+# Configuring nginx docker to work with phpfpm
 
 Add following to your docker-compose.yml:
 
