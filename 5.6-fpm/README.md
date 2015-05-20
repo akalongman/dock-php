@@ -40,8 +40,8 @@ Create fpm.conf and php.ini file in the path you have specified in docker-compos
 
 Samples for fpm.conf and php.ini:
 
- * php.ini - [https://gist.github.com/torniker/27472db39a623fe95a2c](https://gist.github.com/torniker/27472db39a623fe95a2c)
- * fpm.conf - [https://gist.github.com/torniker/e5192a3e42b4d72092ca](https://gist.github.com/torniker/e5192a3e42b4d72092ca)
+ * php.ini - [https://github.com/akalongman/dock-php/wiki/php.ini](https://github.com/akalongman/dock-php/wiki/php.ini)
+ * fpm.conf - [https://github.com/akalongman/dock-php/wiki/fpm.conf](https://github.com/akalongman/dock-php/wiki/fpm.conf)
 
 # Configuring nginx docker to work with phpfmp
 
@@ -61,4 +61,4 @@ nginx:
 
 Create nginx.conf in the path specified in docker-compose.yml
 
-example nginx.conf - [https://gist.github.com/torniker/d09db27177e158568a51](https://gist.github.com/torniker/d09db27177e158568a51)
+example nginx.conf - [https://github.com/akalongman/dock-php/wiki/nginx.conf](https://github.com/akalongman/dock-php/wiki/nginx.conf)
