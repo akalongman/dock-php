@@ -1,4 +1,4 @@
-FROM php:5.5.25-fpm
+FROM php:5.5-fpm
 MAINTAINER Avtandil Kikabidze <akalongman@gmail.com>
 
 # Install modules
