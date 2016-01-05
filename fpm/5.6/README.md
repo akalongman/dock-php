@@ -1,4 +1,4 @@
-Docker From php:5.4.41-fpm
+Docker From php:5.6-fpm
 
 Added libraries:
 

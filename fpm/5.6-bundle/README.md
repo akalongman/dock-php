@@ -1,4 +1,4 @@
-Docker From php:5.6.9-fpm
+Docker From php:5.6-fpm
 
 Added libraries:
 
@@ -20,6 +20,17 @@ Added libraries:
  * xml
  * xmlrpc
  * zip
+
+Also included php developer bundle:
+
+ * git
+ * msmtp-mta
+ * openssh-client
+ * xDebug
+ * composer
+ * phpunit
+ * phpcs
+
 
 # Docker compose usage
 
