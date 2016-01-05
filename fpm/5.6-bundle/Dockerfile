@@ -34,7 +34,7 @@ RUN buildDeps=" \
         bcmath bz2 calendar dba enchant exif ftp gd gettext gmp imap intl ldap mbstring mcrypt mssql mysql mysqli opcache pcntl pdo pdo_dblib pdo_mysql pdo_pgsql pgsql pspell shmop snmp soap sockets sysvmsg sysvsem sysvshm tidy wddx xmlrpc xsl zip xdebug \
     " \
     && echo "deb http://httpredir.debian.org/debian jessie contrib non-free" > /etc/apt/sources.list.d/additional.list \
-    && apt-get update && apt-get install -y libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
+    && apt-get update && apt-get install -y libicu52 libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
     && apt-get install -y $buildDeps --no-install-recommends \
     && cd /usr/src/php/ext/ \
     && curl -L http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz | tar -zxf - \
@@ -48,9 +48,6 @@ RUN buildDeps=" \
     && docker-php-ext-configure imap --with-imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-configure ldap --with-ldap-sasl \
     && docker-php-ext-install $phpModules \
-#    && echo "xdebug.default_enable=1\n\
-#xdebug.cli_color=1\n\
-#xdebug.coverage_enable=1" >> /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini \
     && printf "\n" | pecl install memcache \
     && printf "\n" | pecl install memcached \
     && printf "\n" | pecl install mongo \
@@ -58,7 +55,7 @@ RUN buildDeps=" \
     && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
 
 # Install additional packages
-RUN apt-get update && apt-get install -y libicu52 git msmtp-mta openssh-client --no-install-recommends && rm -r /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends && rm -r /var/lib/apt/lists/*
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -80,5 +77,9 @@ RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
     && chmod 755 phpcbf.phar \
     && mv phpcbf.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/phpcbf.phar /usr/local/bin/phpcbf
+
+# Install Node.js
+RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
+    && apt-get install -y nodejs build-essential
 
 COPY msmtprc /etc/
