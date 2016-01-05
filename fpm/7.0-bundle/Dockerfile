@@ -32,10 +32,10 @@ RUN buildDeps=" \
         libxslt1-dev \
         zlib1g-dev \
         firebird-dev \
-        unixODBC-dev \
+        libsqlite3-dev \
     " \
     && phpModules=" \
-        bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp gd gettext gmp hash iconv imap interbase intl json ldap mbstring mcrypt mysqli odbc opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_oci pdo_odbc pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode reflection session shmop simplexml snmp soap sockets spl standard sysvmsg sysvsem sysvshm tidy tokenizer wddx xdebug xml xmlreader xmlrpc xmlwriter xsl zip \
+        bcmath bz2 calendar ctype curl dba dom enchant exif fileinfo ftp gd gettext gmp hash iconv imap interbase intl json ldap mbstring mcrypt mysqli opcache pcntl pdo pdo_dblib pdo_firebird pdo_mysql pdo_pgsql pdo_sqlite pgsql phar posix pspell readline recode reflection session shmop simplexml snmp soap sockets spl standard sysvmsg sysvsem sysvshm tidy tokenizer wddx xdebug xml xmlreader xmlrpc xmlwriter xsl zip \
     " \
     && echo "deb http://httpredir.debian.org/debian jessie contrib non-free" > /etc/apt/sources.list.d/additional.list \
     && apt-get update && apt-get install -y libicu52 libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
