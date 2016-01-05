@@ -1,4 +1,4 @@
-Docker From php:5.6-fpm
+Docker From php:7.0-fpm
 
 Added libraries:
 
@@ -61,7 +61,7 @@ Add to your docker-compose.yml file following:
 ```
 phpfpm:
   command: php-fpm --allow-to-run-as-root
-  image: akalongman/dock-php:5.6-fpm-bundle
+  image: akalongman/dock-php:7.0-fpm-bundle
   volumes:
     - /path/to/fpm.conf:/usr/local/etc/php-fpm.conf
     - /path/to/php.ini:/usr/local/etc/php/php.ini
