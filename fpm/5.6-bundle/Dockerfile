@@ -2,11 +2,7 @@ FROM php:5.6-fpm
 
 MAINTAINER Avtandil Kikabidze <akalongman@gmail.com>
 
-RUN echo "Acquire::http::Pipeline-Depth 0; \
-    Acquire::http::No-Cache=True; \
-    Acquire::BrokenProxy=true;" > /etc/apt/apt.conf.d/99fixbadproxy
-
-
+RUN echo 'Acquire::http::Pipeline-Depth "0";\nAcquire::http::No-Cache=True;\nAcquire::BrokenProxy=true;' >> /etc/apt/apt.conf.d/99fixbadproxy
 
 # Install modules
 RUN buildDeps=" \
@@ -74,6 +70,7 @@ RUN buildDeps=" \
         xsl \
         zip \
     " \
+    #&& rm -rf /var/lib/apt/lists/* \
     && apt-get update && apt-get install -y libicu52 libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
     && apt-get install -y $buildDeps --no-install-recommends \
     && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
