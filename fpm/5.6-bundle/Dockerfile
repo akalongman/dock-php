@@ -2,87 +2,38 @@ FROM php:5.6-fpm
 
 MAINTAINER Avtandil Kikabidze <akalongman@gmail.com>
 
-# Disable proxy caching
-#RUN echo 'Acquire::http::Pipeline-Depth "0";\nAcquire::http::No-Cache=True;\nAcquire::BrokenProxy=true;' >> /etc/apt/apt.conf.d/99fixbadproxy
-
 # Install modules
 RUN buildDeps=" \
+        libc-client-dev \
+        libkrb5-dev \
         freetds-dev \
         libbz2-dev \
-        libc-client-dev \
-        libenchant-dev \
         libfreetype6-dev \
-        libgmp3-dev \
-        libicu-dev \
         libjpeg62-turbo-dev \
-        libkrb5-dev \
-        libldap2-dev \
         libmcrypt-dev \
-        libmemcached-dev \
         libpng12-dev \
-        libpq-dev \
-        libpspell-dev \
-        libsasl2-dev \
-        libsnmp-dev \
+        libsqlite3-dev \
         libssl-dev \
-        libtidy-dev \
+        libcurl3-dev \
         libxml2-dev \
-        libxpm-dev \
+        libzzip-dev \
+        libmemcached-dev \
         libxslt1-dev \
-        zlib1g-dev \
+        libgmp3-dev \
+        libtidy-dev \
+        libicu-dev \
+        libpq-dev \
     " \
-    && phpModules=" \
-        bcmath \
-        bz2 \
-        calendar \
-        dba \
-        enchant \
-        exif \
-        ftp \
-        gettext \
-        gd \
-        gmp \
-        imap \
-        intl \
-        ldap \
-        mbstring \
-        mcrypt \
-        mssql \
-        mysql \
-        mysqli \
-        opcache \
-        pcntl \
-        pdo \
-        pdo_dblib \
-        pdo_mysql \
-        pdo_pgsql \
-        pgsql \
-        pspell \
-        shmop \
-        snmp \
-        soap \
-        sockets \
-        sysvmsg \
-        sysvsem \
-        sysvshm \
-        tidy \
-        wddx \
-        xmlrpc \
-        xsl \
-        zip \
-    " \
-    #&& rm -rf /var/lib/apt/lists/* \
-    && apt-get update && apt-get install -y libicu52 libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
-    && apt-get install -y $buildDeps --no-install-recommends \
-    && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
-    && ln -s /usr/lib/x86_64-linux-gnu/libldap_r.so /usr/lib/libldap.so \
-    && ln -s /usr/lib/x86_64-linux-gnu/libldap_r.a /usr/lib/libldap_r.a \
+    && apt-get update \
+    && apt-get install -y libmcrypt4 libmemcachedutil2 libsybdb5 libxslt1.1 libpq5 \
     && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.a /usr/lib/libsybdb.a \
     && ln -s /usr/lib/x86_64-linux-gnu/libsybdb.so /usr/lib/libsybdb.so \
+    && apt-get install -y $buildDeps \
+    && ln -s /usr/include/x86_64-linux-gnu/gmp.h /usr/include/gmp.h \
     && docker-php-ext-configure gd --with-freetype-dir=/usr/include/ --with-jpeg-dir=/usr/include/ \
     && docker-php-ext-configure imap --with-imap --with-kerberos --with-imap-ssl \
-    && docker-php-ext-configure ldap --with-ldap-sasl \
-    && docker-php-ext-install $phpModules
+    && docker-php-ext-install gd \
+    && docker-php-ext-install pdo_dblib pdo_pgsql pgsql shmop intl pcntl tidy gmp gettext imap mssql sockets xsl pdo soap opcache bz2 calendar gettext bcmath exif iconv json mcrypt mbstring mysql mysqli pdo_mysql pdo_sqlite phar curl ftp hash session simplexml tokenizer xml xmlrpc zip
 
 # Install xDebug
 RUN pecl install xdebug
@@ -97,7 +48,9 @@ RUN pecl install redis
 RUN docker-php-ext-enable redis
 
 # Install additional packages
-RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends
+RUN apt-get update && apt-get install -y git msmtp-mta openssh-client \
+    && apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps \
+    && rm -rf /var/lib/apt/lists/* && apt-get clean
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -119,15 +72,5 @@ RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
     && chmod 755 phpcbf.phar \
     && mv phpcbf.phar /usr/local/bin/ \
     && ln -s /usr/local/bin/phpcbf.phar /usr/local/bin/phpcbf
-
-# Install Node.js
-RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
-    && apt-get update && apt-get install -y nodejs build-essential
-
-COPY msmtprc /etc/
-
-# Clean image
-RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps && rm -rf /var/lib/apt/lists/* && apt-get clean
-
 
 CMD ["php-fpm"]
