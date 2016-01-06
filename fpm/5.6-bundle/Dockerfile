@@ -2,7 +2,8 @@ FROM php:5.6-fpm
 
 MAINTAINER Avtandil Kikabidze <akalongman@gmail.com>
 
-RUN echo 'Acquire::http::Pipeline-Depth "0";\nAcquire::http::No-Cache=True;\nAcquire::BrokenProxy=true;' >> /etc/apt/apt.conf.d/99fixbadproxy
+# Disable proxy caching
+#RUN echo 'Acquire::http::Pipeline-Depth "0";\nAcquire::http::No-Cache=True;\nAcquire::BrokenProxy=true;' >> /etc/apt/apt.conf.d/99fixbadproxy
 
 # Install modules
 RUN buildDeps=" \
