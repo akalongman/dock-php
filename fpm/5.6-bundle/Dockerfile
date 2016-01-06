@@ -35,7 +35,7 @@ RUN buildDeps=" \
     " \
     && echo "deb http://httpredir.debian.org/debian jessie contrib non-free" > /etc/apt/sources.list.d/additional.list \
     && apt-get update && apt-get install -y libicu52 libc-client2007e libenchant1c2a libfreetype6 libjpeg62-turbo libmcrypt4 libmemcachedutil2 libpng12-0 libpq5 libsybdb5 libtidy-0.99-0 libx11-6 libxpm4 libxslt1.1 snmp --no-install-recommends \
-    && apt-get install -y $buildDeps --no-install-recommends \
+    && apt-get update && apt-get install -y $buildDeps --no-install-recommends \
     && cd /usr/src/php/ext/ \
     && curl -L http://xdebug.org/files/xdebug-$XDEBUG_VERSION.tgz | tar -zxf - \
     && mv xdebug-$XDEBUG_VERSION xdebug \
@@ -80,6 +80,6 @@ RUN curl -OL https://squizlabs.github.io/PHP_CodeSniffer/phpcs.phar \
 
 # Install Node.js
 RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
-    && apt-get install -y nodejs build-essential
+    && apt-get update && apt-get install -y nodejs build-essential
 
 COPY msmtprc /etc/
