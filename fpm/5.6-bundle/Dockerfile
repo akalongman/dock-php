@@ -2,6 +2,12 @@ FROM php:5.6-fpm
 
 MAINTAINER Avtandil Kikabidze <akalongman@gmail.com>
 
+RUN echo "Acquire::http::Pipeline-Depth 0; \
+    Acquire::http::No-Cache=True; \
+    Acquire::BrokenProxy=true;" > /etc/apt/apt.conf.d/99fixbadproxy
+
+
+
 # Install modules
 RUN buildDeps=" \
         freetds-dev \
@@ -79,8 +85,6 @@ RUN buildDeps=" \
     && docker-php-ext-configure imap --with-imap --with-kerberos --with-imap-ssl \
     && docker-php-ext-configure ldap --with-ldap-sasl \
     && docker-php-ext-install $phpModules
-    #&& apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps
-
 
 # Install xDebug
 RUN pecl install xdebug
@@ -90,8 +94,12 @@ RUN docker-php-ext-enable xdebug
 RUN pecl install memcached
 RUN docker-php-ext-enable memcached
 
+# Install Redis
+RUN pecl install redis
+RUN docker-php-ext-enable redis
+
 # Install additional packages
-RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends && rm -r /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y git msmtp-mta openssh-client --no-install-recommends
 
 # Install composer and put binary into $PATH
 RUN curl -sS https://getcomposer.org/installer | php \
@@ -119,5 +127,9 @@ RUN curl -sL https://deb.nodesource.com/setup_4.x | bash - \
     && apt-get update && apt-get install -y nodejs build-essential
 
 COPY msmtprc /etc/
+
+# Clean image
+RUN apt-get purge -y --auto-remove -o APT::AutoRemove::RecommendsImportant=false -o APT::AutoRemove::SuggestsImportant=false $buildDeps && rm -rf /var/lib/apt/lists/* && apt-get clean
+
 
 CMD ["php-fpm"]
