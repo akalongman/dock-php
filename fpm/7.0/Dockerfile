@@ -139,6 +139,12 @@ RUN curl -sL https://deb.nodesource.com/setup_5.x | bash -
 RUN apt-get install -y nodejs
 RUN npm install bower gulp grunt-cli -g
 
+# Disable xdebug for composer
+RUN sed  -i 's/zend_extension=xdebug.so/#zend_extension=xdebug.so/g' /etc/php/7.0/cli/conf.d/*?xdebug.ini
+# Load xdebug Zend extension with php command
+RUN alias php='php -dzend_extension=xdebug.so'
+# PHPUnit needs xdebug for coverage. In this case, just make an alias with php command prefix.
+RUN alias phpunit='php $(which phpunit)'
 
 # Clean system
 RUN apt-get purge -y $buildDeps \
